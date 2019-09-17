@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView locationTextView;
     private EditText searchText;
+
+    private ArrayList<Location> locations = new ArrayList<>(50);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                System.out.println("This is your locations ");
+                locations.forEach(System.out::println);
+
                 Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
                 Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, searchText.getText().toString()));
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -59,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
+                addLocation(location);
+
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 String s = String.format(
@@ -68,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 );
                 locationTextView.setText(s);
 
+            }
+
+            private void addLocation(Location location) {
+                locations.set(locations.size() % 50,  location);
             }
 
             @Override
@@ -86,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -94,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    2000,
-                    10,
+                    1000 * 60 * 2,
+                    200,
                     locationListener
             );
         } else {
