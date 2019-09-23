@@ -47,19 +47,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                System.out.println("This is your locations ");
-                locations.forEach(System.out::println);
-
-                Toast.makeText(MainActivity.this, "clicked", Toast.LENGTH_SHORT).show();
-                Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, searchText.getText().toString()));
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setPackage("com.google.android.apps.maps");
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            String search = searchText.getText().toString();
+            Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, search));
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.putExtra("nome_fila", search);
+            intent.setPackage("com.google.android.apps.maps");
+            startActivity(intent);
         });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
