@@ -7,14 +7,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,14 +44,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Location locationMock = new Location("provider");
+        locationMock.setLatitude(-23);
+        locationMock.setLongitude(-46);
+        locations.add(locationMock);
+
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             String search = searchText.getText().toString();
-            Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, search));
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//            Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, search));
+            Intent intent = new Intent(this, ListLocationActivity.class);
             intent.putExtra("nome_fila", search);
-            intent.setPackage("com.google.android.apps.maps");
+            intent.putExtra("locations", locations);
+//            intent.setPackage("com.google.android.apps.maps");
             startActivity(intent);
+
+//            Intent intent = new Intent(this, ListLocationActivity.class);
+//            intent.putExtra("locations", locations);
+//            startActivity(intent);
         });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -75,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void addLocation(Location location) {
-                locations.set(locations.size() % 50,  location);
+                System.out.println("passei e adicionei uma localização");
+                locations.set(locations.size() % 50, location);
             }
 
             @Override
@@ -94,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000 * 60 * 2,
-                    200,
+                    1000,
+                    0,
                     locationListener
             );
         } else {
