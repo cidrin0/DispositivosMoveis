@@ -3,9 +3,8 @@ package com.example.usjtccp3anbua_ciclo_de_vida_gps;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class ListLocationActivity extends AppCompatActivity {
         Intent intentOrigem = getIntent();
         List<Location> locations = (List<Location>) intentOrigem.getSerializableExtra("locations");
 
-        ArrayAdapter<Location> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locations);
+        LocationsAdapter adapter = new LocationsAdapter(this, locations);
         locationsListView.setAdapter(adapter);
         locationsListView.setOnItemClickListener((adapterView, view, position, id) -> {
             Location location = locations.get(position);

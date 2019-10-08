@@ -53,16 +53,11 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             String search = searchText.getText().toString();
-//            Uri uri = Uri.parse(String.format("geo:%f,%f?q=%s", latitude, longitude, search));
             Intent intent = new Intent(this, ListLocationActivity.class);
             intent.putExtra("nome_fila", search);
             intent.putExtra("locations", locations);
-//            intent.setPackage("com.google.android.apps.maps");
             startActivity(intent);
 
-//            Intent intent = new Intent(this, ListLocationActivity.class);
-//            intent.putExtra("locations", locations);
-//            startActivity(intent);
         });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
