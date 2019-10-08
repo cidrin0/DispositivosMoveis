@@ -23,16 +23,31 @@ public class LocationsAdapter extends ArrayAdapter<Location> {
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_item, parent,false);
+            convertView = inflater.inflate(R.layout.list_item, parent, false);
+            LocationViewHolder locationViewHolder = new LocationViewHolder(
+                    convertView.findViewById(R.id.lccationIconImageView),
+                    convertView.findViewById(R.id.latitudeFilaTextView),
+                    convertView.findViewById(R.id.longitudeTextView));
+            convertView.setTag(locationViewHolder);
         }
-        ImageView filaIconImageView = convertView.findViewById(R.id.lccationIconImageView);
-        TextView latitudeTextView = convertView.findViewById(R.id.latitudeFilaTextView);
-        TextView longitudeTextView = convertView.findViewById(R.id.longitudeTextView);
+        LocationViewHolder locationViewHolder = (LocationViewHolder) convertView.getTag();
 
-        filaIconImageView.setImageResource(R.drawable.ic_location_on_black_24dp);
-        latitudeTextView.setText(String.valueOf(location.getLatitude()));
-        longitudeTextView.setText(String.valueOf(location.getLongitude()));
+        locationViewHolder.locationImageView.setImageResource(R.drawable.ic_location_on_black_24dp);
+        locationViewHolder.latitudeTextView.setText(String.valueOf(location.getLatitude()));
+        locationViewHolder.longitudeTextView.setText(String.valueOf(location.getLongitude()));
 
         return convertView;
+    }
+
+    private class LocationViewHolder {
+        public ImageView locationImageView;
+        public TextView longitudeTextView;
+        public TextView latitudeTextView;
+
+        public LocationViewHolder(ImageView locationImageView, TextView longitudeTextView, TextView latitudeTextView) {
+            this.locationImageView = locationImageView;
+            this.longitudeTextView = longitudeTextView;
+            this.latitudeTextView = latitudeTextView;
+        }
     }
 }
