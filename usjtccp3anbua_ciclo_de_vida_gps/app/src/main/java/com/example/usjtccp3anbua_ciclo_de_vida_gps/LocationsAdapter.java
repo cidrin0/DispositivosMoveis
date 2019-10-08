@@ -13,15 +13,18 @@ import java.util.List;
 
 public class LocationsAdapter extends ArrayAdapter<Location> {
 
+    private Context context;
+
     public LocationsAdapter(Context context, List<Location> objects) {
         super(context, -1, objects);
+        this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Location location = getItem(position);
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.list_item, parent, false);
             LocationViewHolder locationViewHolder = new LocationViewHolder(
